@@ -1,0 +1,190 @@
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        companyName:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        floor:
+          type: string
+        lastName:
+          type: string
+        mobile:
+          type: string
+          format: phone
+        phone:
+          type: string
+          format: phone
+        region:
+          type: string
+        street1:
+          type: string
+        street2:
+          type: string
+        street3:
+          type: string
+        zipCode:
+          type: string
+    DeliveryGroup:
+      required:
+        - orderLines
+        - barcode
+        - deliveryGroupId
+        - deliveryGroupState
+        - deliveryGroupType
+        - returnState
+        - sourceId
+        - totalPrice
+      type: object
+      properties:
+        orderLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLine'
+        barcode:
+          type: integer
+          format: int64
+        carrierId:
+          type: string
+        deliveryGroupId:
+          type: integer
+        deliverySourceId:
+          type: string
+          example: D001
+        deliveryGroupState:
+          $ref: '#/components/schemas/DeliveryGroupState'
+        deliveryGroupType:
+          $ref: '#/components/schemas/DeliveryGroupType'
+        pickedDateTime:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        returnState:
+          $ref: '#/components/schemas/ReturnState'
+        totalPrice:
+          $ref: '#/components/schemas/Money'
+    DeliveryGroupState:
+      type: object
+      required:
+        - deliveryGroupStateType
+        - lastUpdatedDateTime
+      properties:
+        deliveryGroupStateType:
+          $ref: '#/components/schemas/DeliveryGroupStateType'
+        lastUpdatedDateTime:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+    DeliveryGroupStateType:
+      type: string
+      enum:
+        - INITIAL
+        - AWAITING_SHIPMENT
+        - AWAITING_PICKING
+        - READY_FOR_HAND_OUT
+        - HANDED_OUT
+        - SHIPPED
+    DeliveryGroupType:
+      type: string
+      enum:
+        - CLICK_COLLECT
+        - DROP_POINT_DELIVERY
+        - HOME_ADDRESS_DELIVERY
+        - OOPUS
+    Money:
+      required:
+        - amount
+        - currencyCode
+      type: object
+      properties:
+        amount:
+          type: number
+        currencyCode:
+          type: string
+          format: ^[A-Z]{3}$
+          example: DKK or USD or EUR
+    Order:
+      required:
+        - billingAddress
+        - catalogId
+        - createdDateTime
+        - deliveryGroups
+        - state
+        - totalPrice
+        - orderId
+      type: object
+      properties:
+        acceptedDateTime:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        catalogId:
+          type: string
+          example: PC_COM_DK
+        createdDateTime:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        deliveryGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryGroup'
+        orderId:
+          type: string
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        salesOrderNumber:
+          type: integer
+          format: int64
+        state:
+          $ref: '#/components/schemas/OrderState'
+        totalPrice:
+          $ref: '#/components/schemas/Money'
+    OrderLine:
+      required:
+        - articleId
+        - articleText
+        - quantity
+        - totalPrice
+        - unit
+      type: object
+      properties:
+        articleId:
+          type: string
+        quantity:
+          minimum: 1
+          type: integer
+          format: int32
+        articleText:
+          type: string
+        totalPrice:
+          $ref: '#/components/schemas/Money'
+        unit:
+          type: string
+    OrderState:
+      type: string
+      enum:
+        - INIT
+        - FILL_BASKET
+        - ORDER_APPROVED
+        - PAYMENT_INITIATED
+        - PAYMENT_AUTHORIZED
+        - CHECKOUT_COMPLETED
+        - ORDER_PLACED
+        - PAYMENT_CAPTURED
+        - INVOICE_SENT
+        - COMPLETED
+    ReturnState:
+      type: string
+      enum:
+        - NOT_RETURNED
+        - PARTIALLY_RETURNED
+        - RETURNED
