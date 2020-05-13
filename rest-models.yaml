@@ -182,6 +182,25 @@ components:
         - PAYMENT_CAPTURED
         - INVOICE_SENT
         - COMPLETED
+    Page:
+      required:
+        - number
+        - numberOfElements
+        - size
+        - totalElements
+        - totalPages
+      properties:
+        number:
+          type: integer
+        numberOfElements:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
     ReturnState:
       type: string
       enum:
